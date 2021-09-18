@@ -28,7 +28,7 @@ export default {
   return this;
   },
   finishChain() {
-  let res = this.chain.map(function(item) {
+  let res = this.arr.map(function(item) {
     return `( ${item} )`;
   });
   this.arr = [];
