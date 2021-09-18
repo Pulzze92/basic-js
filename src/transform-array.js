@@ -13,47 +13,50 @@ import { NotImplementedError } from '../extensions/index.js';
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-export default function transform(arr) {
-  if (typeof(arr) !== 'object') return 'Error';
-  if(!arr) return 'Error';
-  if(arr.length == 0) return [];
+export default function transform(array) {
+  if (!(Array.isArray(array))) throw new Error("'arr' parameter must be an instance of the Array!");
+  if(array.length == 0) return [];
 
-  let map = new Map([
-    ['a', '--discard-next'],
-    ['b', '--discard-prev'],
-    ['c', '--double-next'],
-    ['d', '--double-prev']
-  ]);
-  let hasProp = false;
-  let varT = '';
-  let order = 0;
-  let arr2 = [];
+  if (!(Array.isArray(array))) throw new Error("'arr' parameter must be an instance of the Array!");
+  if(array.length == 0) return [];
+  let arr = [];
 
-  // if(arr[0] == map.get('b') || arr[0] == map.get('d')) return arr[1];
-  // arr.filter((el) => {return el !== Boolean});
+  for (let i = 0; i < array.length; i++) {
+    let orderEl = array[i];
+    var discardNext;
+    var discardPrev;
+    var doubleNext;
+    var doublePrev;
 
-  arr.forEach((el, i) => {
-    if(el === map.get('a') || el === map.get('b') || el === map.get('c') || el === map.get('d')) {
-      hasProp = true;
-      varT += el;
-      order += i;
+    if (orderEl === '--discard-next') {
+      discardNext = i;
+      continue;
     }
-  });
-  arr.forEach(el => {arr2.push(el)});
-  let arrWithoutItem = arr2.splice(order, 1);
-  let condition = arrWithoutItem.toString();
-  switch (condition) {
-    case map.get('a') : arr2.forEach((el, i, array) => {if (array[i + 2] === map.get('d') || array[i + 2] === map.get('b')) {i += 2} else {i++}});
-      break;
-    case map.get('b') : arr2.forEach((el, i, array) => {if (i > 0) arr2.pop()});
-      break;
-    case map.get('c') : arr2.forEach((el, i, array) => {if (array.length - 1 > i) arr2.push(array[i + 1])});
-      break;
-    case map.get('d') : arr2.forEach((el, i, array) => { if(i > 0) arr2.push(array[i - 1])});
-      break;
-    default: arr2.forEach((el, i, array) => {arr2.push(array[i])});
-      break;
+    if (orderEl === '--discard-prev') {
+      discardPrev = i;
+      console.log(discardPrev);
+      continue;
+    }
+    if (orderEl === '--double-next') {
+      doubleNext = i;
+      continue;
+    }
+    if (orderEl === '--double-prev') {
+      doublePrev = i;
+      continue;
+    }
+    arr.push(orderEl);
+
   }
-  if (!hasProp) return arr;
-  return arr2;
+  if (array.includes('--discard-next')) {arr.splice(discardNext, 1)}
+  if (array.includes('--discard-prev')) {arr.splice(discardPrev - 1, 1)}
+  if (array.includes('--double-next')) {arr[doubleNext] *= 2};
+  if (array.includes('--double-prev')) {arr[doublePrev - 1] *= 2};
+  return arr;
+
+  // --discard-next excludes the next element of the array from the transformed array.
+  // --discard-prev excludes the previous element of the array from the transformed array.
+  // --double-next doubles the next element of the array in the transformed array.
+  // --double-prev doubles the previous element of the array in the transformed array.
+
 }
