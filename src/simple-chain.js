@@ -5,40 +5,40 @@ import { NotImplementedError } from '../extensions/index.js';
  * Implement chainMaker object according to task description
  *
  */
-export default {
-  arr: [],
 
+let chain = [];
+export default {
   getLength() {
-    return this.arr.length;
+    return this.chain.length;
   },
   addLink(value) {
-    this.arr.push(`( ${value} )`);
+    this.chain.push(`( ${value} )`);
     return this;
   },
   removeLink(position) {
-    if(position > this.arr.length - 1) {
-      this.arr = [];
+    if(position > this.chain.length - 1) {
+      this.chain = [];
       throw new Error('message':'You can\'t remove incorrect link!');
     }
     if (isNaN(position)) {
-      this.arr = [];
+      this.chain = [];
       throw new Error('message':'You can\'t remove incorrect link!');
     }
     if (position < 1) {
-      this.arr = [];
+      this.chain = [];
       throw new Error('message':'You can\'t remove incorrect link!');
     }
 
-    this.arr.splice(position - 1, 1);
+    this.chain.splice(position - 1, 1);
     return this;
   },
   reverseChain() {
-    this.arr.reverse();
+    this.chain.reverse();
     return this;
   },
   finishChain() {
-    let res = this.arr.join('~~');
-    this.arr = [];
+    let res = this.chain.join('~~');
+    this.chain = [];
     return res;
   }
 };
