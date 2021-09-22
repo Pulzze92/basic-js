@@ -12,9 +12,15 @@ import { NotImplementedError } from '../extensions/index.js';
  * 
  */
 export default function getSeason(date) {
-  if (date == undefined || !date.valueOf() || date.length == 0)
-    return 'Invalid date!';
-  if (null in date) return 'THROWN';
+  if (!date) {
+    return "Unable to determine the time of year!";
+  }
+  if (!(date instanceof Date)) throw new Error('Invalid date!')
+  try {
+    isNaN(date.getTime())
+  } catch {
+    throw new Error('Invalid date!');
+  }
 
   let map = new Map ([
     [1, 'winter'],
@@ -30,8 +36,8 @@ export default function getSeason(date) {
     [11, 'autumn'],
     [12, 'winter']
   ]);
-  let date1 = new Date(date);
-  let month = date1.getMonth() + 1;
+
+  let month = date.getMonth() + 1;
   let season = map.get(month);
 
   return season;
