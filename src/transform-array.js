@@ -49,9 +49,14 @@ export default function transform(array) {
 
   }
   if (array.includes('--discard-next')) {arr.splice(discardNext, 1)}
-  if (array.includes('--discard-prev')) {arr.splice(discardPrev - 1, 1)}
+  if (array.includes('--discard-prev')) {
+    if (discardPrev == 0) {} else {
+    arr.splice(discardPrev - 1, 1)}}
   if (array.includes('--double-next')) {arr[doubleNext] *= 2};
   if (array.includes('--double-prev')) {arr[doublePrev - 1] *= 2};
+  arr.forEach((el, i, array) => {
+    if (Number.isNaN(el)) arr.pop();
+    });
   return arr;
 
   // --discard-next excludes the next element of the array from the transformed array.

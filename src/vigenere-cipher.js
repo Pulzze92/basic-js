@@ -20,12 +20,54 @@ import { NotImplementedError } from '../extensions/index.js';
  * 
  */
 export default class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  encrypt(message, key) {
+    let keyRepeat = Math.ceil(message.length / key.length);
+    key = key.repeat(keyRepeat).toUpperCase();
+    message = message.toUpperCase();
+    console.log(key);
+
+    const ALPHABET = 26;
+    let startAlph = 'A';
+    let codeStart = startAlph.charCodeAt(0);
+
+    let res = [];
+
+    for (let k = 0; k < message.length; k++) {
+      if (message[k] === '') {
+        res.push(message[k]);
+      } else {
+        let index = message.charCodeAt(k) - codeStart;
+        let letterShift = key.charCodeAt(k) - codeStart;
+
+        res.push(String.fromCharCode(codeStart + index) % ALPHABET);
+      };
+    }
+    return res.join('');
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+  decrypt(message, key) {
+    let keyRepeat = Math.ceil(message.length / key.length); 
+    key = key.repeat(keyRepeat).toUpperCase();
+    message = message.toUpperCase();
+    console.log(key);
+
+    const ALPHABET = 26;
+    let startAlph = 'A';
+    let codeStart = startAlph.charCodeAt(0);
+
+    let res = [];
+
+    for (let k = 0; k < message.length; k++) {
+      if (message[k] === '') {
+        res.push(message[k]);
+      } else {
+        let index = message.charCodeAt(k) - codeStart;
+        let letterShift = key.charCodeAt(k) - codeStart;
+
+        res.push(String.fromCharCode(codeStart + (index - letterShift + ALPHABET) % ALPHABET));
+      };
+    }
+    return res.join('');
+
   }
 }
